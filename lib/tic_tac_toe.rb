@@ -43,60 +43,60 @@ class TicTacToe
     puts 'Please enter 1-9:'
     input = gets.strip
     index = input_to_index(input)
-    if valid_move?(board, index)
-      move(board, index, current_player(board))
-      display_board(board)
+    if valid_move?(index)
+      move(index, current_player
+      display_board
     else
-      turn(board)
+      turn
     end
   end
 
-  def turn_count(board)
-    turn = 0
-    board.each do |value|
-      turn += 1 if ['X', 'O'].include?(value)
+  def turn_count
+    t = 0
+    @board.each do |value|
+      t += 1 if ['X', 'O'].include?(value)
     end
-    turn
+    t
   end
 
-  def current_player(board)
-    turn_count(board).even? ? 'X' : 'O'
+  def current_player
+    turn_count.even? ? 'X' : 'O'
   end
 
-  def won?(board)
+  def won?
     WIN_COMBINATIONS.each do |combo|
       a, b, c = combo
-      return [a, b, c] if board[a] == board[b] && board[b] == board[c] && ['X', 'O'].include?(board[a])
+      return [a, b, c] if @board[a] == @board[b] && @board[b] == @board[c] && ['X', 'O'].include?(@board[a])
     end
     false
   end
 
-  def full?(board)
-    board.all? do |value|
+  def full?
+    @board.all? do |value|
       ['X', 'O'].include?(value)
     end
   end
 
-  def draw?(board)
-    full?(board) && !won?(board)
+  def draw?
+    full? && !won?
   end
 
-  def over?(board)
-    won?(board) || full?(board) || draw?(board)
+  def over?
+    won? || full? || draw?
   end
 
-  def winner(board)
-    a, b, c = won?(board)
-    a ? board[a] : nil
+  def winner
+    a, b, c = won?
+    a ? @board[a] : nil
   end
 
-  def play(board)
-    until over?(board)
-      turn(board)
+  def play
+    until over?
+      turn
     end
 
-    if won?(board)
-      puts "Congratulations #{winner(board)}!"
+    if won?
+      puts "Congratulations #{winner}!"
     else
       puts "Cat's Game!"
     end
