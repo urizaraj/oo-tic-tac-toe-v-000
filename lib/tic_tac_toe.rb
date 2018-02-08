@@ -33,3 +33,72 @@ class TicTacToe
   def position_taken?(index)
     !(@board[index].nil? || @board[index] == " ")
   end
+
+  def valid_move?(index)
+    return true if (0..8) === index && !position_taken?(index)
+    false
+  end
+
+  def turn(board)
+    puts 'Please enter 1-9:'
+    input = gets.strip
+    index = input_to_index(input)
+    if valid_move?(board, index)
+      move(board, index, current_player(board))
+      display_board(board)
+    else
+      turn(board)
+    end
+  end
+
+  def turn_count(board)
+    turn = 0
+    board.each do |value|
+      turn += 1 if ['X', 'O'].include?(value)
+    end
+    turn
+  end
+
+  def current_player(board)
+    turn_count(board).even? ? 'X' : 'O'
+  end
+
+  def won?(board)
+    WIN_COMBINATIONS.each do |combo|
+      a, b, c = combo
+      return [a, b, c] if board[a] == board[b] && board[b] == board[c] && ['X', 'O'].include?(board[a])
+    end
+    false
+  end
+
+  def full?(board)
+    board.all? do |value|
+      ['X', 'O'].include?(value)
+    end
+  end
+
+  def draw?(board)
+    full?(board) && !won?(board)
+  end
+
+  def over?(board)
+    won?(board) || full?(board) || draw?(board)
+  end
+
+  def winner(board)
+    a, b, c = won?(board)
+    a ? board[a] : nil
+  end
+
+  def play(board)
+    until over?(board)
+      turn(board)
+    end
+
+    if won?(board)
+      puts "Congratulations #{winner(board)}!"
+    else
+      puts "Cat's Game!"
+    end
+  end
+end
